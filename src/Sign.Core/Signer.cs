@@ -132,7 +132,7 @@ namespace Sign.Core
                     // The first will be the package and the second is the filter
                     using (TemporaryDirectory temporaryDirectory = new(directoryService))
                     {
-                        string inputFileName = Path.Combine(temporaryDirectory.Directory.FullName, Path.GetRandomFileName());
+                        string inputFileName = Path.Combine(temporaryDirectory.Directory.FullName, $"{Path.GetFileNameWithoutExtension(input.Name)}_{Path.GetRandomFileName()}");
                         // However check its extension as it might be important (e.g. zip, bundle, etc)
                         if (signer.CanSign(input))
                         {

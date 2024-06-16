@@ -127,7 +127,16 @@ namespace Sign.Core
                     // Inner files are now signed
                     // now look for the manifest file and sign that if we have one
 
-                    FileInfo? manifestFile = filteredFiles.SingleOrDefault(f => ".manifest".Equals(f.Extension, StringComparison.OrdinalIgnoreCase));
+                    // find the manifest file that corresponds to this deployment manifest file
+                    string[] fileNameParts = file.Name.Split('_');
+                    string originalFileName = "";
+                    if (fileNameParts.Length > 1)
+                    {
+                        originalFileName = string.Join(null, fileNameParts.Take(fileNameParts.Length - 1));
+          
+                    }
+
+                    FileInfo? manifestFile = filteredFiles.SingleOrDefault(f => ".manifest".Equals(f.Extension, StringComparison.OrdinalIgnoreCase) && f.Name.StartsWith(originalFileName));
 
                     string fileArgs = $@"-update ""{manifestFile}"" {args}";
 
@@ -153,7 +162,7 @@ namespace Sign.Core
                     }
 
                     // Now sign deployment manifest files (.application/.vsto).
-                    // Order by desending length to put the inner one first
+                    // Order by descending length to put the inner one first
                     List<FileInfo> deploymentManifestFiles = filteredFiles
                         .Where(f => ".vsto".Equals(f.Extension, StringComparison.OrdinalIgnoreCase) ||
                                     ".application".Equals(f.Extension, StringComparison.OrdinalIgnoreCase))

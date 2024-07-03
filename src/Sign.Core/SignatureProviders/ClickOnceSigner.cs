@@ -164,8 +164,8 @@ namespace Sign.Core
                     // Now sign deployment manifest files (.application/.vsto).
                     // Order by descending length to put the inner one first
                     List<FileInfo> deploymentManifestFiles = filteredFiles
-                        .Where(f => ".vsto".Equals(f.Extension, StringComparison.OrdinalIgnoreCase) ||
-                                    ".application".Equals(f.Extension, StringComparison.OrdinalIgnoreCase))
+                        .Where(f => ".vsto".Equals(f.Extension, StringComparison.OrdinalIgnoreCase) && f.Name.StartsWith(originalFileName) ||
+                                    ".application".Equals(f.Extension, StringComparison.OrdinalIgnoreCase) && f.Name.StartsWith(originalFileName))
                         .Select(f => new { file = f, f.FullName.Length })
                         .OrderByDescending(f => f.Length)
                         .Select(f => f.file)
